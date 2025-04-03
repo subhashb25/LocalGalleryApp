@@ -16,11 +16,11 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64() // For Apple Silicon Macs
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "Shared"
@@ -37,6 +37,7 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
+
         commonMain.dependencies {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
@@ -51,6 +52,11 @@ kotlin {
             languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
         }
     }
+
+    tasks.register("assembleXCFramework") {
+        dependsOn("linkDebugFrameworkIosSimulatorArm64", "linkDebugFrameworkIosX64", "linkDebugFrameworkIosArm64")
+    }
+
 }
 
 android {
@@ -64,3 +70,5 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
 }
+
+
