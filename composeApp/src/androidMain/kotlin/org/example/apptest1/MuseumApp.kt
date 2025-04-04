@@ -1,11 +1,13 @@
 package org.example.apptest1
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import org.example.apptest1.di.initKoin
 import org.example.apptest1.screens.DetailViewModel
 import org.example.apptest1.screens.ListViewModel
 import org.koin.dsl.module
 
+@HiltAndroidApp
 class MuseumApp : Application() {
     override fun onCreate() {
         super.onCreate()

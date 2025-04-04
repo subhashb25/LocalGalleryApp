@@ -33,9 +33,18 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.koin.android)
+            // Room Database
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.ktx)
+            implementation(libs.androidx.room.ktx)
+
+            // Hilt Dependency Injection
+            implementation(libs.androidx.hilt)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.koin.core)
         }
 
         commonMain.dependencies {
@@ -43,6 +52,7 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.koin.core)
+            implementation(libs.kotlinx.coroutines.core)
             api(libs.kmp.observable.viewmodel)
         }
 
@@ -69,6 +79,15 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
+
 }
+/*Instead of ksp("..."), in Kotlin Multiplatform, you should use add("kspAndroid", "...") for Android-specific dependencies.
+
+kspAndroid ensures that KSP processes the Room annotations only for the Android target.*/
+
+dependencies{
+    add("kspAndroid", libs.androidx.room.compiler)
+}
+
 
 

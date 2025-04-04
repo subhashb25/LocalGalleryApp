@@ -7,7 +7,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.androidHilt)
 }
 
 kotlin {
@@ -24,6 +26,7 @@ kotlin {
         val desktopMain by getting
         
         androidMain.dependencies {
+            // Jetpack Compose Dependencies
             implementation(libs.androidx.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.viewmodel.compose)
@@ -31,6 +34,15 @@ kotlin {
             implementation(libs.koin.androidx.compose)
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
+
+            // Hilt Dependency Injection
+            implementation(libs.androidx.hilt.composed)
+            implementation(libs.androidx.hilt)
+
+            // Room Database Dependencies
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.ktx)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -80,6 +92,13 @@ android {
 
 dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspAndroid", libs.hilt.compiler)
+}
+
+// Enable Hilt Annotation Processing
+ksp {
+    arg("dagger.hilt.disableModulesHaveInstallInCheck", "true")
 }
 
 compose.desktop {
