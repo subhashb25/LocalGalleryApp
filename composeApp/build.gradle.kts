@@ -1,3 +1,4 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -5,12 +6,23 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinCompose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.androidHilt)
 }
+
+
+repositories {
+    google()
+    mavenCentral()
+    maven("https://jitpack.io") // 👈 Needed for javapoet from JitPack
+    maven {
+        url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
+    }
+}
+
+
 
 kotlin {
     androidTarget {
@@ -62,7 +74,6 @@ kotlin {
         }
     }
 }
-
 android {
     namespace = "org.example.apptest1"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -94,6 +105,18 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspAndroid", libs.hilt.compiler)
+
+    // 👇 Manual workaround for missing javapoet
+    implementation("com.github.bumptech:javapoet:1.13.1")
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "com.github.bumptech" && requested.name == "javapoet") {
+            useTarget("com.squareup:javapoet:1.13.0")
+            because("Fixing wrong dependency resolution: bumptech doesn't host javapoet")
+        }
+    }
 }
 
 // Enable Hilt Annotation Processing
@@ -110,5 +133,12 @@ compose.desktop {
             packageName = "org.example.apptest1"
             packageVersion = "1.0.0"
         }
+    }
+}
+repositories {
+    google()
+    mavenCentral()
+    maven {
+        url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
     }
 }

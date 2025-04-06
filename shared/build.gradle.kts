@@ -1,8 +1,11 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
+
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinCompose)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)
@@ -17,16 +20,9 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64() // For Apple Silicon Macs
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "Shared"
-            isStatic = true
-        }
-    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
     
     jvm()
     
@@ -42,10 +38,22 @@ kotlin {
             // Hilt Dependency Injection
             implementation(libs.androidx.hilt)
         }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.koin.core)
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+
+        val iosMain by creating {
+            dependsOn(commonMain.get())
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+                implementation(libs.koin.core)
+            }
         }
+
 
         commonMain.dependencies {
             implementation(libs.ktor.client.core)
@@ -68,6 +76,7 @@ kotlin {
     }
 
 }
+
 
 android {
     namespace = "org.example.apptest1.shared"
