@@ -2,48 +2,24 @@ rootProject.name = "LocalGalleryApp"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
-    repositories {
-        google {
-            mavenContent {
-                includeGroupAndSubgroups("androidx")
-                includeGroupAndSubgroups("com.android")
-                includeGroupAndSubgroups("com.google")
-                includeGroupAndSubgroups("com.google.dagger")
-                includeGroupAndSubgroups("org.jetbrains.compose")
-            }
-        }
-        mavenCentral()
-        // 👇 Required for Compose Multiplatform plugins
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev") {
-            mavenContent {
-                includeGroupAndSubgroups("org.jetbrains.compose")
-            }
-        }
-        maven("https://maven.pkg.jetbrains.space/public/p/kotlin-plugins/release") // ✅ Add this
-
-        gradlePluginPortal()
+    plugins {
+        id("org.jetbrains.compose") version "1.7.3"
     }
+    repositories {
+        gradlePluginPortal() // ✅ must be first or early
+        google()
+        mavenCentral()
+        // ✅ required for org.jetbrains.compose plugin
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    }
+
 }
 
 dependencyResolutionManagement {
     repositories {
-        google {
-            mavenContent {
-                includeGroupAndSubgroups("androidx")
-                includeGroupAndSubgroups("com.android")
-                includeGroupAndSubgroups("com.google")
-                includeGroupAndSubgroups("com.google.dagger")
-                includeGroupAndSubgroups("com.squareup")
-                includeGroupAndSubgroups("org.jetbrains.compose")
-            }
-        }
+        google()
         mavenCentral()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev") {
-            mavenContent {
-                includeGroupAndSubgroups("org.jetbrains.compose")
-            }
-        }
-
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 

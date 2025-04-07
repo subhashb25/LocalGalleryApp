@@ -1,11 +1,9 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
 
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.kotlinCompose)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)
@@ -13,6 +11,15 @@ plugins {
 }
 
 kotlin {
+    targets.all {
+        // Fail-safe check to skip deprecated targets
+        if (name.contains("iosArm32", ignoreCase = true)) {
+            throw GradleException("iosArm32 should not be configured!")
+        }
+    }
+    targets.all {
+        println(">>> KMP Target: ${this.name}")
+    }
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {

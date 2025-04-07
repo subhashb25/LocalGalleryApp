@@ -4,26 +4,26 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinCompose)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.androidHilt)
 }
 kotlin {
-    jvm("desktop") // defines desktopMain, desktopTest, etc.
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
+    jvm("desktop") // defines desktopMain, desktopTest, etc.
     sourceSets {
         val desktopMain by getting
         
         androidMain.dependencies {
             // Jetpack Compose Dependencies
-            implementation(libs.androidx.compose.ui.tooling.preview)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.viewmodel.compose)
             implementation(libs.androidx.navigation.compose)
@@ -41,23 +41,24 @@ kotlin {
 
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.resources)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
             implementation(libs.kotlinx.serialization.core)
         }
         desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
+            implementation(libs.compose.desktop)
             implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }
+
 android {
     namespace = "org.example.apptest1"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -86,7 +87,7 @@ android {
 }
 
 dependencies {
-    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.compose.ui)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspAndroid", libs.hilt.compiler)
 
