@@ -1,22 +1,18 @@
+import com.google.devtools.ksp.gradle.KspExtension
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.androidApplication)     // Android-specific setup first
     alias(libs.plugins.kotlinMultiplatform)    // Then the multiplatform core
+    alias(libs.plugins.androidApplication)     // Android-specific setup first
     alias(libs.plugins.compose)                // UI framework next
     alias(libs.plugins.kotlinxSerialization)   // Serialization after core setup
     alias(libs.plugins.ksp)                    // Symbol processing after language setup
     alias(libs.plugins.androidHilt)            // DI after all relevant configurations
 }
 kotlin {
-    androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
-
+    androidTarget()
+    jvmToolchain(17)
     jvm("desktop") // defines desktopMain, desktopTest, etc.
     sourceSets {
         val desktopMain by getting
@@ -31,9 +27,10 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
 
-            // Hilt Dependency Injection
+            // Hilt Dependencies via bundle
+            implementation(libs.dagger.hilt)
             implementation(libs.androidx.hilt.composed)
-            implementation(libs.androidx.hilt)
+
 
             // Room Database Dependencies
             implementation(libs.androidx.room.runtime)
@@ -83,21 +80,28 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+    sourceSets.configureEach {
+        kotlin.srcDir("build/generated/ksp/${name}/kotlin")
+    }
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
 
 dependencies {
     debugImplementation(libs.compose.ui)
-    add("kspAndroid", libs.androidx.room.compiler)
-    add("kspAndroid", libs.hilt.compiler)
 
-
+    // ✅ KSP for Room
+    ksp(libs.androidx.room.compiler)
+    ksp(libs.dagger.hilt.android.compiler)
+    ksp(libs.dagger.hilt.compiler)
+    // ✅ KAPT for Hilt
+    //kapt(libs.hilt.compiler) // ✅ unwraps the dependency // Hilt must use kapt
 }
 
-// Enable Hilt Annotation Processing
-ksp {
+configure<KspExtension> {
     arg("dagger.hilt.disableModulesHaveInstallInCheck", "true")
 }
+
 

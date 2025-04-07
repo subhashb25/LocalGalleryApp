@@ -29,7 +29,7 @@ ksp = "2.0.21-1.0.27"
 # --- Hilt ---
 hiltAndroid = "2.48"
 hilt-compose = "1.2.0"
-hilt-compiler = "2.56.1"
+hiltCompiler = "1.2.0"
 
 # --- Koin ---
 koinAndroid = "3.5.0"
@@ -77,10 +77,12 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx-hilt-composed = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-compose" }
-androidx-hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt-compiler" }
 
+androidx-hilt-composed = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-compose" }
+dagger-hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
+dagger-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
+#androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompiler"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

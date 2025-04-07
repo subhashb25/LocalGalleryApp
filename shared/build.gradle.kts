@@ -43,7 +43,7 @@ kotlin {
             implementation(libs.androidx.room.ktx)
 
             // Hilt Dependency Injection
-            implementation(libs.androidx.hilt)
+            implementation(libs.dagger.hilt)
         }
         val iosX64Main by getting
         val iosArm64Main by getting
