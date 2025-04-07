@@ -1,5 +1,3 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -11,28 +9,14 @@ plugins {
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.androidHilt)
 }
-
-
-repositories {
-    google()
-    mavenCentral()
-    maven("https://jitpack.io") // 👈 Needed for javapoet from JitPack
-    maven {
-        url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
-    }
-}
-
-
-
 kotlin {
+    jvm("desktop") // defines desktopMain, desktopTest, etc.
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
-    jvm("desktop")
     
     sourceSets {
         val desktopMain by getting
@@ -110,35 +94,8 @@ dependencies {
     implementation("com.github.bumptech:javapoet:1.13.1")
 }
 
-configurations.all {
-    resolutionStrategy.eachDependency {
-        if (requested.group == "com.github.bumptech" && requested.name == "javapoet") {
-            useTarget("com.squareup:javapoet:1.13.0")
-            because("Fixing wrong dependency resolution: bumptech doesn't host javapoet")
-        }
-    }
-}
-
 // Enable Hilt Annotation Processing
 ksp {
     arg("dagger.hilt.disableModulesHaveInstallInCheck", "true")
 }
 
-compose.desktop {
-    application {
-        mainClass = "org.example.apptest1.MainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.apptest1"
-            packageVersion = "1.0.0"
-        }
-    }
-}
-repositories {
-    google()
-    mavenCentral()
-    maven {
-        url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
-    }
-}

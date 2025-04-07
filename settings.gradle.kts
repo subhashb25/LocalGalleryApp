@@ -8,36 +8,45 @@ pluginManagement {
                 includeGroupAndSubgroups("androidx")
                 includeGroupAndSubgroups("com.android")
                 includeGroupAndSubgroups("com.google")
+                includeGroupAndSubgroups("com.google.dagger")
+                includeGroupAndSubgroups("org.jetbrains.compose")
             }
         }
         mavenCentral()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        maven("https://jitpack.io") // ✅ ensure this is here too
+        // 👇 Required for Compose Multiplatform plugins
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev") {
+            mavenContent {
+                includeGroupAndSubgroups("org.jetbrains.compose")
+            }
+        }
+        maven("https://maven.pkg.jetbrains.space/public/p/kotlin-plugins/release") // ✅ Add this
+
         gradlePluginPortal()
     }
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
                 includeGroupAndSubgroups("com.android")
                 includeGroupAndSubgroups("com.google")
+                includeGroupAndSubgroups("com.google.dagger")
                 includeGroupAndSubgroups("com.squareup")
+                includeGroupAndSubgroups("org.jetbrains.compose")
             }
         }
         mavenCentral()
-        maven {
-            url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
-            content {
-                includeGroup("com.squareup")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev") {
+            mavenContent {
+                includeGroupAndSubgroups("org.jetbrains.compose")
             }
         }
 
     }
 }
 
-include(":composeApp")
 include(":shared")
+include(":composeApp")
+include(":desktopApp")
