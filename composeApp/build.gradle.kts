@@ -91,8 +91,7 @@ dependencies {
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspAndroid", libs.hilt.compiler)
 
-    // 👇 Manual workaround for missing javapoet
-    implementation("com.github.bumptech:javapoet:1.13.1")
+
 }
 
 // Enable Hilt Annotation Processing
