@@ -11,6 +11,8 @@ plugins {
 }
 
 kotlin {
+    androidTarget()
+    jvmToolchain(17)
     targets.all {
         // Fail-safe check to skip deprecated targets
         if (name.contains("iosArm32", ignoreCase = true)) {
@@ -20,12 +22,7 @@ kotlin {
     targets.all {
         println(">>> KMP Target: ${this.name}")
     }
-    androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
+
 
     iosX64()
     iosArm64()
@@ -89,8 +86,8 @@ android {
     namespace = "org.example.apptest1.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

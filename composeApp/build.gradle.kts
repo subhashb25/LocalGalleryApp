@@ -7,8 +7,8 @@ plugins {
     alias(libs.plugins.androidApplication)     // Android-specific setup first
     alias(libs.plugins.compose)                // UI framework next
     alias(libs.plugins.kotlinxSerialization)   // Serialization after core setup
-    alias(libs.plugins.ksp)                    // Symbol processing after language setup
     alias(libs.plugins.androidHilt)            // DI after all relevant configurations
+    alias(libs.plugins.ksp)                    // Symbol processing after language setup
 }
 kotlin {
     androidTarget()
@@ -83,6 +83,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     sourceSets.configureEach {
         kotlin.srcDir("build/generated/ksp/${name}/kotlin")
     }
@@ -91,7 +92,9 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.ui)
+    implementation(libs.dagger.hilt)
 
+    implementation(libs.androidx.hilt.composed)
     // ✅ KSP for Room
     ksp(libs.androidx.room.compiler)
     ksp(libs.dagger.hilt.android.compiler)
