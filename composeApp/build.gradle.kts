@@ -2,12 +2,12 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.compose)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.androidHilt)
+    alias(libs.plugins.androidApplication)     // Android-specific setup first
+    alias(libs.plugins.kotlinMultiplatform)    // Then the multiplatform core
+    alias(libs.plugins.compose)                // UI framework next
+    alias(libs.plugins.kotlinxSerialization)   // Serialization after core setup
+    alias(libs.plugins.ksp)                    // Symbol processing after language setup
+    alias(libs.plugins.androidHilt)            // DI after all relevant configurations
 }
 kotlin {
     androidTarget {
@@ -39,6 +39,8 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.room.ktx)
 
+            // 👇 Manual workaround for missing javapoet
+            //implementation(libs.javapoet)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
