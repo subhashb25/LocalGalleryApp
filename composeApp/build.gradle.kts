@@ -1,12 +1,11 @@
-import com.google.devtools.ksp.gradle.KspExtension
+
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)    // Then the multiplatform core
     alias(libs.plugins.androidApplication)     // Android-specific setup first
+    alias(libs.plugins.kotlinMultiplatform)    // Then the multiplatform core
     alias(libs.plugins.compose)                // UI framework next
     alias(libs.plugins.kotlinxSerialization)   // Serialization after core setup
     alias(libs.plugins.androidHilt)            // DI after all relevant configurations
-    alias(libs.plugins.ksp)                    // Symbol processing after language setup
     id("org.jetbrains.kotlin.kapt")            // no version added since its already pulled via another plugin i.e. Kotlin Multiplatform
 }
 kotlin {
@@ -36,7 +35,7 @@ kotlin {
             implementation(libs.androidx.room.ktx)
 
             // 👇 Manual workaround for missing javapoet
-            //implementation(libs.javapoet)
+            implementation(libs.javapoet)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -88,23 +87,25 @@ android {
     }
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
-
+configurations.all {
+    resolutionStrategy {
+        force("com.squareup:javapoet:1.13.0")
+    }
+}
 dependencies {
     debugImplementation(libs.compose.ui)
-    implementation(libs.dagger.hilt)
 
-    implementation(libs.androidx.hilt.composed)
-    // ✅ KSP for Room
-    ksp(libs.androidx.room.compiler)
-
+    add("kapt", libs.javapoet)
     add("kapt", libs.dagger.hilt.android.compiler)
-    ksp(libs.dagger.hilt.compiler)
+    //ksp(libs.dagger.hilt.compiler)
     // ✅ KAPT for Hilt
     //kapt(libs.hilt.compiler) // ✅ unwraps the dependency // Hilt must use kapt
 }
 
+/*
 configure<KspExtension> {
     arg("dagger.hilt.disableModulesHaveInstallInCheck", "true")
 }
+*/
 
 

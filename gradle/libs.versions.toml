@@ -4,7 +4,7 @@ agp = "8.8.2"
 
 # --- Kotlin ---
 javapoet = "1.13.0"
-kotlin = "2.0.21"
+kotlin = "2.1.0"
 
 # --- Android & Compose ---
 android-compileSdk = "35"
@@ -13,7 +13,6 @@ android-targetSdk = "35"
 androidx-activityCompose = "1.10.1"
 androidx-lifecycle = "2.8.4"
 androidx-navigationCompose = "2.8.9"
-androidx-ui-tooling = "1.7.8"
 androidx-viewmodelCompose = "2.8.7"
 coil = "3.0.0-rc02"
 compose = "1.7.0"
@@ -24,12 +23,11 @@ kmpObservableViewmodel = "1.0.0-BETA-7"
 kmpNativeCoroutines = "1.0.0-ALPHA-37"
 kotlinx-coroutines = "1.10.1"
 kotlinx-serialization = "1.7.3"
-ksp = "2.0.21-1.0.27"
+ksp = "2.1.0-1.0.29"
 
 # --- Hilt ---
-hiltAndroid = "2.48"
+hiltAndroid = "2.56.1"
 hilt-compose = "1.2.0"
-hiltCompiler = "1.2.0"
 
 # --- Koin ---
 koinAndroid = "3.5.0"
@@ -81,8 +79,6 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-hilt-composed = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-compose" }
 dagger-hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
-dagger-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }#
-#androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompiler"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

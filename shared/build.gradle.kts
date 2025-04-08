@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.ksp)                         // Symbol processing after language setup
     alias(libs.plugins.kmpNativeCoroutines)
 }
 
@@ -99,7 +99,9 @@ android {
 kspAndroid ensures that KSP processes the Room annotations only for the Android target.*/
 
 dependencies{
-    add("kspAndroid", libs.androidx.room.compiler)
+    //add("kspAndroid", libs.androidx.room.compiler)
+    // ✅ KSP for Room
+    ksp(libs.androidx.room.compiler)
 }
 
 
