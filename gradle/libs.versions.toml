@@ -81,7 +81,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-hilt-composed = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-compose" }
 dagger-hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
-dagger-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
+dagger-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }#
 #androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompiler"}
 
 [plugins]

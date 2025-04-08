@@ -1,6 +1,4 @@
 import com.google.devtools.ksp.gradle.KspExtension
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)    // Then the multiplatform core
@@ -9,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlinxSerialization)   // Serialization after core setup
     alias(libs.plugins.androidHilt)            // DI after all relevant configurations
     alias(libs.plugins.ksp)                    // Symbol processing after language setup
+    id("org.jetbrains.kotlin.kapt")            // no version added since its already pulled via another plugin i.e. Kotlin Multiplatform
 }
 kotlin {
     androidTarget()
@@ -97,7 +96,8 @@ dependencies {
     implementation(libs.androidx.hilt.composed)
     // ✅ KSP for Room
     ksp(libs.androidx.room.compiler)
-    ksp(libs.dagger.hilt.android.compiler)
+
+    add("kapt", libs.dagger.hilt.android.compiler)
     ksp(libs.dagger.hilt.compiler)
     // ✅ KAPT for Hilt
     //kapt(libs.hilt.compiler) // ✅ unwraps the dependency // Hilt must use kapt
