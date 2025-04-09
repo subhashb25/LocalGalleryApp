@@ -9,18 +9,16 @@ plugins {
 
 // ✅ Apply KAPT only for Android after evaluation
 afterEvaluate {
-    if (plugins.hasPlugin("com.android.library") || plugins.hasPlugin("com.android.application")) {
-        plugins.apply("org.jetbrains.kotlin.kapt")
+    afterEvaluate {
+        if (plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")) {
+            apply(plugin = "org.jetbrains.kotlin.kapt")
+            dependencies {
 
-        // ✅ Add kapt-specific dependencies
-        dependencies {
-            implementation(libs.dagger.hilt)
-            implementation(libs.androidx.hilt.composed)
-            add("kapt", libs.dagger.hilt.android.compiler)
+                implementation(libs.dagger.hilt)
+                implementation(libs.androidx.hilt.composed)
+                add("kapt", libs.dagger.hilt.android.compiler)
 
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.room.ktx)
-            add("kspAndroid", libs.androidx.room.compiler)
+            }
         }
     }
 }
@@ -106,4 +104,8 @@ android {
 // ✅ Regular debug dependency
 dependencies {
     debugImplementation(libs.compose.ui)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    add("kspAndroid", libs.androidx.room.compiler)
 }
