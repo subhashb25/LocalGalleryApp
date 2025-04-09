@@ -11,13 +11,9 @@ import org.example.apptest1.data.KtorMuseumApi
 import org.example.apptest1.data.MuseumApi
 import org.example.apptest1.data.MuseumRepository
 import org.example.apptest1.data.MuseumStorage
-import org.example.apptest1.dbInterface.ItemLocalDataSource
-import org.example.apptest1.screens.DetailViewModel
-import org.example.apptest1.screens.ListViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.module
-
 
 
 val dataModule = module {

@@ -1,0 +1,21 @@
+-- MuseumObject.sq
+CREATE TABLE MuseumObjectEntity (
+    objectID INTEGER NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    artistDisplayName TEXT NOT NULL,
+    medium TEXT NOT NULL,
+    dimensions TEXT NOT NULL,
+    objectURL TEXT NOT NULL,
+    objectDate TEXT NOT NULL,
+    primaryImage TEXT NOT NULL,
+    primaryImageSmall TEXT NOT NULL,
+    repository TEXT NOT NULL,
+    department TEXT NOT NULL,
+    creditLine TEXT NOT NULL
+);
+
+selectAll:
+SELECT * FROM MuseumObjectEntity;
+
+insertOrReplace:
+INSERT OR REPLACE INTO MuseumObjectEntity VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);

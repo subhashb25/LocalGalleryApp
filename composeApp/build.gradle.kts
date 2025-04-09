@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.KaptExtension
-
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinMultiplatform)

@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)                         // Symbol processing after language setup
     alias(libs.plugins.kmpNativeCoroutines)
+    alias(libs.plugins.sqldelight)
+
 }
 
 kotlin {
@@ -27,9 +29,9 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-    
+
     jvm()
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
@@ -42,22 +44,18 @@ kotlin {
             // Hilt Dependency Injection
             implementation(libs.dagger.hilt)
         }
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
 
         val iosMain by creating {
             dependsOn(commonMain.get())
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-
             dependencies {
                 implementation(libs.ktor.client.darwin)
                 implementation(libs.koin.core)
+                implementation(libs.sqldelight.ios)
             }
         }
-
+        val iosX64Main by getting { dependsOn(iosMain) }
+        val iosArm64Main by getting { dependsOn(iosMain) }
+        val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
         commonMain.dependencies {
             implementation(libs.ktor.client.core)
@@ -66,21 +64,28 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.kotlinx.coroutines.core)
             api(libs.kmp.observable.viewmodel)
+
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
         }
 
         // Required by KMM-ViewModel
         all {
             languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
             languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
+
         }
     }
 
     tasks.register("assembleXCFramework") {
-        dependsOn("linkDebugFrameworkIosSimulatorArm64", "linkDebugFrameworkIosX64", "linkDebugFrameworkIosArm64")
+        dependsOn(
+            "linkDebugFrameworkIosSimulatorArm64",
+            "linkDebugFrameworkIosX64",
+            "linkDebugFrameworkIosArm64"
+        )
     }
 
 }
-
 
 android {
     namespace = "org.example.apptest1.shared"
@@ -94,6 +99,7 @@ android {
     }
 
 }
+
 /*Instead of ksp("..."), in Kotlin Multiplatform, you should use add("kspAndroid", "...") for Android-specific dependencies.
 
 kspAndroid ensures that KSP processes the Room annotations only for the Android target.*/

@@ -38,7 +38,7 @@ ktor = "3.0.0"
 # --- Room ---
 room = "2.6.1"
 
-
+sqldelight = "2.0.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -79,6 +79,12 @@ androidx-hilt-composed = { module = "androidx.hilt:hilt-navigation-compose", ver
 dagger-hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+sqldelight-ios = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-gradle = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqldelight" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
@@ -88,3 +94,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidHilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "compose-plugin" }
+
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

@@ -8,5 +8,11 @@ plugins {
     alias(libs.plugins.kotlinxSerialization) apply false
     alias(libs.plugins.kmpNativeCoroutines) apply false
     alias(libs.plugins.ksp) apply false
-    alias(libs.plugins.androidHilt) apply(false)
+    alias(libs.plugins.androidHilt) apply (false)
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("com.google.guava:guava:31.1-jre")
+    }
 }
