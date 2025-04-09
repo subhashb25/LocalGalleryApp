@@ -1,3 +1,4 @@
+
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
@@ -7,4 +8,5 @@ plugins {
     alias(libs.plugins.kotlinxSerialization) apply false
     alias(libs.plugins.kmpNativeCoroutines) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.androidHilt) apply(false)
 }

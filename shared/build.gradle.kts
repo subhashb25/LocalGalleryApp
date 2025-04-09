@@ -101,7 +101,7 @@ kspAndroid ensures that KSP processes the Room annotations only for the Android 
 dependencies{
     //add("kspAndroid", libs.androidx.room.compiler)
     // ✅ KSP for Room
-    ksp(libs.androidx.room.compiler)
+    add("kspAndroid", libs.androidx.room.compiler)
 }
 
 

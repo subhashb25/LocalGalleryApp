@@ -1,57 +1,70 @@
-
+import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 
 plugins {
-    alias(libs.plugins.androidApplication)     // Android-specific setup first
-    alias(libs.plugins.kotlinMultiplatform)    // Then the multiplatform core
-    alias(libs.plugins.compose)                // UI framework next
-    alias(libs.plugins.kotlinxSerialization)   // Serialization after core setup
-    alias(libs.plugins.androidHilt)            // DI after all relevant configurations
-    id("org.jetbrains.kotlin.kapt")            // no version added since its already pulled via another plugin i.e. Kotlin Multiplatform
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidHilt) apply false
 }
+
+// ✅ Apply KAPT only for Android after evaluation
+afterEvaluate {
+    if (plugins.hasPlugin("com.android.library") || plugins.hasPlugin("com.android.application")) {
+        plugins.apply("org.jetbrains.kotlin.kapt")
+
+        // ✅ Add kapt-specific dependencies
+        dependencies {
+            implementation(libs.dagger.hilt)
+            implementation(libs.androidx.hilt.composed)
+            add("kapt", libs.dagger.hilt.android.compiler)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.ktx)
+            add("kspAndroid", libs.androidx.room.compiler)
+        }
+    }
+}
+
 kotlin {
     androidTarget()
     jvmToolchain(17)
-    jvm("desktop") // defines desktopMain, desktopTest, etc.
+    jvm("desktop")
+
     sourceSets {
-        val desktopMain by getting
-        
-        androidMain.dependencies {
-            // Jetpack Compose Dependencies
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.viewmodel.compose)
-            implementation(libs.androidx.navigation.compose)
-            implementation(libs.koin.androidx.compose)
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network.ktor)
-
-            // Hilt Dependencies via bundle
-            implementation(libs.dagger.hilt)
-            implementation(libs.androidx.hilt.composed)
-
-
-            // Room Database Dependencies
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.room.ktx)
-
-            // 👇 Manual workaround for missing javapoet
-            implementation(libs.javapoet)
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.resources)
+                implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.androidx.lifecycle.viewmodel)
+                implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation(projects.shared)
+                implementation(libs.kotlinx.serialization.core)
+            }
         }
-        commonMain.dependencies {
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.material3)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.resources)
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(projects.shared)
-            implementation(libs.kotlinx.serialization.core)
+
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.viewmodel.compose)
+                implementation(libs.androidx.navigation.compose)
+                implementation(libs.koin.androidx.compose)
+                implementation(libs.coil.compose)
+                implementation(libs.coil.network.ktor)
+            }
         }
-        desktopMain.dependencies {
-            implementation(libs.compose.desktop)
-            implementation(libs.kotlinx.coroutines.swing)
+
+        val desktopMain by getting {
+            dependencies {
+                implementation(libs.compose.desktop)
+                implementation(libs.kotlinx.coroutines.swing)
+            }
         }
     }
 }
@@ -67,16 +80,19 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -85,27 +101,11 @@ android {
     sourceSets.configureEach {
         kotlin.srcDir("build/generated/ksp/${name}/kotlin")
     }
+
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
-configurations.all {
-    resolutionStrategy {
-        force("com.squareup:javapoet:1.13.0")
-    }
-}
+
+// ✅ Regular debug dependency
 dependencies {
     debugImplementation(libs.compose.ui)
-
-    add("kapt", libs.javapoet)
-    add("kapt", libs.dagger.hilt.android.compiler)
-    //ksp(libs.dagger.hilt.compiler)
-    // ✅ KAPT for Hilt
-    //kapt(libs.hilt.compiler) // ✅ unwraps the dependency // Hilt must use kapt
 }
-
-/*
-configure<KspExtension> {
-    arg("dagger.hilt.disableModulesHaveInstallInCheck", "true")
-}
-*/
-
-
