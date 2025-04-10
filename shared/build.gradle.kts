@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)                         // Symbol processing after language setup
     alias(libs.plugins.kmpNativeCoroutines)
-    alias(libs.plugins.sqldelight)
+    //alias(libs.plugins.sqldelight)
 
 }
 
@@ -65,8 +65,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             api(libs.kmp.observable.viewmodel)
 
-            implementation(libs.sqldelight.runtime)
-            implementation(libs.sqldelight.coroutines)
+            //implementation(libs.sqldelight.runtime)
+            //implementation(libs.sqldelight.coroutines)
         }
 
         // Required by KMM-ViewModel

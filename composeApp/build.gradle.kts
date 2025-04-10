@@ -9,18 +9,17 @@ plugins {
 
 // ✅ Apply KAPT only for Android after evaluation
 afterEvaluate {
-    afterEvaluate {
-        if (plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")) {
-            apply(plugin = "org.jetbrains.kotlin.kapt")
-            dependencies {
+    if (plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")) {
+        apply(plugin = "org.jetbrains.kotlin.kapt")
+        dependencies {
 
-                implementation(libs.dagger.hilt)
-                implementation(libs.androidx.hilt.composed)
-                add("kapt", libs.dagger.hilt.android.compiler)
+            implementation(libs.dagger.hilt)
+            implementation(libs.androidx.hilt.composed)
+            add("kapt", libs.dagger.hilt.android.compiler)
 
-            }
         }
     }
+
 }
 
 kotlin {

@@ -34,6 +34,7 @@ val dataModule = module {
             initialize()
         }
     }
+
 }
 
 fun initKoin(extraModules: List<Module> = emptyList()) {

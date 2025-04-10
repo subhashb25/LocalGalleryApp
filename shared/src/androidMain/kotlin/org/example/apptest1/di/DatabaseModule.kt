@@ -1,13 +1,15 @@
 package org.example.apptest1.di
 
 import android.content.Context
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.example.apptest1.dao.ItemDao
 import org.example.apptest1.data.local.AppDatabase
-import org.example.apptest1.data.local.LocalDataSource
+import org.example.apptest1.dbInterface.ItemLocalDataSource
 import javax.inject.Singleton
 
 @Module
@@ -16,9 +18,12 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(context: Context): AppDatabase {
-        return AppDatabase.getInstance(context)
-    }
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
+        Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app_database"
+        ).build()
 
     @Provides
     fun provideItemDao(database: AppDatabase): ItemDao {
@@ -26,7 +31,7 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideLocalDataSource(itemDao: ItemDao): LocalDataSource {
-        return LocalDataSource(itemDao)
+    fun provideLocalDataSource(itemDao: ItemDao): ItemLocalDataSource {
+        return ItemLocalDataSource(itemDao)
     }
 }
