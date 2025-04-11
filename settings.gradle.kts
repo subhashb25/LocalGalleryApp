@@ -39,6 +39,7 @@ dependencyResolutionManagement {
     }
 }
 
+
 // ✅ Required: Includes your shared Kotlin Multiplatform logic
 include(":shared")
 
@@ -47,4 +48,7 @@ include(":composeApp")
 
 // ✅ Optional: Include only if you have a separate desktop-specific app module
 include(":desktopApp")
+
+include(":processor-runner")
+include(":generated-shared")
 

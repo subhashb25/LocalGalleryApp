@@ -4,8 +4,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)
-    kotlin("kapt")
-    alias(libs.plugins.androidHilt)
 }
 
 
@@ -38,7 +36,10 @@ kotlin {
                 implementation(libs.koin.androidx.compose)
                 implementation(libs.coil.compose)
                 implementation(libs.coil.network.ktor)
-                
+
+                implementation(libs.androidx.hilt.composed)
+
+                implementation(project(":generated-shared"))
             }
         }
 
@@ -46,6 +47,9 @@ kotlin {
             dependencies {
                 implementation(libs.compose.desktop)
                 implementation(libs.kotlinx.coroutines.swing)
+
+                // ✅ Generated shared Hilt code from processor-runner
+                implementation(project(":generated-shared"))
             }
         }
     }
@@ -79,7 +83,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
+    // ✅ Ensure Room/KSP output is used on Android
     sourceSets.configureEach {
         kotlin.srcDir("build/generated/ksp/${name}/kotlin")
     }
@@ -94,8 +98,18 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     add("kspAndroid", libs.androidx.room.compiler)
+}
 
-    implementation(libs.dagger.hilt)
-    implementation(libs.androidx.hilt.composed)
-    add("kapt", libs.dagger.hilt.android.compiler)
+// ✅ Auto-sync kapt output from processor-runner
+tasks.named("desktopMainClasses") {
+    dependsOn(":syncGeneratedCode")
+}
+
+// ✅ Hook into the global build + assemble lifecycle
+tasks.named("build") {
+    dependsOn(":syncGeneratedCode")
+}
+
+tasks.named("assemble") {
+    dependsOn(":syncGeneratedCode")
 }
