@@ -1,26 +1,13 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.compose)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.androidHilt) apply false
+    kotlin("kapt")
+    alias(libs.plugins.androidHilt)
 }
 
-// ✅ Apply KAPT only for Android after evaluation
-afterEvaluate {
-    if (plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")) {
-        apply(plugin = "org.jetbrains.kotlin.kapt")
-        dependencies {
-
-            implementation(libs.dagger.hilt)
-            implementation(libs.androidx.hilt.composed)
-            add("kapt", libs.dagger.hilt.android.compiler)
-
-        }
-    }
-
-}
 
 kotlin {
     androidTarget()
@@ -36,9 +23,6 @@ kotlin {
                 implementation(libs.compose.ui)
                 implementation(libs.compose.resources)
                 implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.androidx.lifecycle.viewmodel)
-                implementation(libs.androidx.lifecycle.runtime.compose)
-                implementation(projects.shared)
                 implementation(libs.kotlinx.serialization.core)
             }
         }
@@ -49,9 +33,12 @@ kotlin {
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.androidx.viewmodel.compose)
                 implementation(libs.androidx.navigation.compose)
+                implementation(libs.androidx.lifecycle.viewmodel)
+                implementation(libs.androidx.lifecycle.runtime.compose)
                 implementation(libs.koin.androidx.compose)
                 implementation(libs.coil.compose)
                 implementation(libs.coil.network.ktor)
+                
             }
         }
 
@@ -103,8 +90,12 @@ android {
 // ✅ Regular debug dependency
 dependencies {
     debugImplementation(libs.compose.ui)
-
+    implementation("com.google.guava:guava:32.1.2-jre")
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     add("kspAndroid", libs.androidx.room.compiler)
+
+    implementation(libs.dagger.hilt)
+    implementation(libs.androidx.hilt.composed)
+    add("kapt", libs.dagger.hilt.android.compiler)
 }

@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlinxSerialization) apply false
     alias(libs.plugins.kmpNativeCoroutines) apply false
     alias(libs.plugins.ksp) apply false
@@ -13,6 +14,11 @@ plugins {
 
 configurations.all {
     resolutionStrategy {
-        force("com.google.guava:guava:31.1-jre")
+        force("com.google.guava:guava:32.1.2-jre")
+    }
+}
+buildscript {
+    dependencies {
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.56.1")
     }
 }
