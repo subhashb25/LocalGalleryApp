@@ -50,7 +50,6 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.darwin)
                 implementation(libs.koin.core)
-                implementation(libs.sqldelight.ios)
             }
         }
         val iosX64Main by getting { dependsOn(iosMain) }

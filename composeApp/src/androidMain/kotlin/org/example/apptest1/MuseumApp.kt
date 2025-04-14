@@ -3,6 +3,7 @@ package org.example.apptest1
 import android.app.Application
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.HiltAndroidApp
+import org.example.apptest1.di.androidSharedModule
 import org.example.apptest1.di.initKoin
 import org.example.apptest1.screens.DetailViewModel
 import org.example.apptest1.screens.ListViewModel
@@ -21,12 +22,11 @@ class MuseumApp : Application() {
 
         // 🔹 Define a Koin module that "bridges" Hilt dependencies into Koin.
         // We're taking Hilt-injected instances and telling Koin to use those.
-        val bridgeModule = module {
-            // These instances are already created by Hilt — no duplication.
-            single { hiltEntryPoint.itemLocalDataSource() }
-            single { hiltEntryPoint.museumApi() }
-            single { hiltEntryPoint.museumStorage() }
-        }
+        val bridgeModule = androidSharedModule(
+            hiltEntryPoint.museumApi(),
+            hiltEntryPoint.museumStorage(),
+            hiltEntryPoint.itemLocalDataSource()
+        )
 
         // 🔹 Initialize Koin with:
         // 1. The bridge module that imports Hilt dependencies.

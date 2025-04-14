@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)
-    kotlin("kapt")
     alias(libs.plugins.androidHilt)
 }
 
@@ -17,6 +16,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(project(":shared"))
                 implementation(libs.compose.runtime)
                 implementation(libs.compose.foundation)
                 implementation(libs.compose.material3)
@@ -24,6 +24,7 @@ kotlin {
                 implementation(libs.compose.resources)
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.kotlinx.serialization.core)
+
             }
         }
 
@@ -97,5 +98,5 @@ dependencies {
 
     implementation(libs.dagger.hilt)
     implementation(libs.androidx.hilt.composed)
-    add("kapt", libs.dagger.hilt.android.compiler)
+    add("kspAndroid", libs.dagger.hilt.android.compiler)
 }

@@ -1,4 +1,10 @@
 
+buildscript {
+    dependencies {
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.56.1")
+    }
+}
+
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
@@ -17,8 +23,14 @@ configurations.all {
         force("com.google.guava:guava:32.1.2-jre")
     }
 }
-buildscript {
-    dependencies {
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.56.1")
+allprojects {
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == "org.jetbrains.kotlin") {
+                useVersion(libs.versions.kotlin.get())
+                because("Force Kotlin version to avoid NoSuchMethodError")
+            }
+        }
     }
 }
+
