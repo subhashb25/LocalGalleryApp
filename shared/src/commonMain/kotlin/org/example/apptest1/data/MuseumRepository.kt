@@ -32,11 +32,14 @@ class MuseumRepository(
 
     fun getObjects(): Flow<List<MuseumObject>> = flow {
         museumStorage.getObjects().collect { cachedItems ->
-            if (cachedItems.isNotEmpty()) {
-                emit(cachedItems) // Return from memory if available
-            } else {
-                val dbItems = localDataSource.getAllItems()
-                emit(dbItems) // Return from Room if memory cache is empty
+            when {
+                cachedItems.isNotEmpty() -> {
+                    emit(cachedItems) // Return from memory if available
+                }
+                else -> {
+                    val dbItems = localDataSource.getAllItems()
+                    emit(dbItems) // Return from Room if memory cache is empty
+                }
             }
         }
     }.flowOn(Dispatchers.IO)
