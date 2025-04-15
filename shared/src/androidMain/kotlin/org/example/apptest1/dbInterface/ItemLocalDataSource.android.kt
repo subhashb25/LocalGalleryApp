@@ -1,6 +1,8 @@
 
 package org.example.apptest1.dbInterface
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.example.apptest1.dao.ItemDao
 import org.example.apptest1.data.MuseumObject
 import org.example.apptest1.db.toDomain
@@ -15,7 +17,12 @@ actual class ItemLocalDataSource (private val itemDao: ItemDao) {
         return itemDao.getAllItems().map { it.toDomain() }
     }
 
+
     actual suspend fun insertItems(items: List<MuseumObject>) {
         itemDao.insertItems(items.map { it.toEntity() })
+    }
+
+    actual suspend fun getItemById(id: Int): Flow<MuseumObject?> {
+        return itemDao.getItemById(id).map { it?.toDomain() }
     }
 }
