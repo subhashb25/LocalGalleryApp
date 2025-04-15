@@ -26,6 +26,11 @@ object DatabaseModule {
         ).build()
 
     @Provides
+    fun provideItemDao(appDatabase: AppDatabase): ItemDao {
+        return appDatabase.itemDao()
+    }
+
+    @Provides
     @Singleton
     fun provideLocalDataSource(itemDao: ItemDao): ItemLocalDataSource {
         return ItemLocalDataSource(itemDao)
