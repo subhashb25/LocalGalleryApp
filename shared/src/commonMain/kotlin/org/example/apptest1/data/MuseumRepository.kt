@@ -53,19 +53,28 @@ class MuseumRepository(
         }
     }.flowOn(Dispatchers.IO)
 
-    fun getObjectById(objectId: Int): Flow<MuseumObject?> = flow {
-        museumStorage.getObjectById(objectId).collect { cachedObject ->
-            when {
-                cachedObject != null -> {
-                    emit(cachedObject) // Return from memory cache if available
-                }
-                else -> {
-                    // Collect the flow from localDataSource.getItemById() before emitting the value
-                    localDataSource.getItemById(objectId).collect { dbObject ->
-                        emit(dbObject) // Emit the object from Room database
+    fun getObjectById(objectId: Int, useCache: Boolean = true): Flow<MuseumObject?> = flow {
+        if (useCache) {
+            // Use cache if the flag is true
+            museumStorage.getObjectById(objectId).collect { cachedObject ->
+                when {
+                    cachedObject != null -> {
+                        emit(cachedObject) // Return from memory cache if available
+                    }
+                    else -> {
+                        // Collect the flow from localDataSource.getItemById() before emitting the value
+                        localDataSource.getItemById(objectId).collect { dbObject ->
+                            emit(dbObject) // Emit the object from Room database
+                        }
                     }
                 }
             }
+        } else {
+            // Skip the cache and get data directly from the local database
+            localDataSource.getItemById(objectId).collect { dbObject ->
+                emit(dbObject) // Emit the object from Room database
+            }
         }
     }.flowOn(Dispatchers.IO)
+
 }

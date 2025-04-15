@@ -20,7 +20,7 @@ class DetailViewModel(private val museumRepository: MuseumRepository) : ViewMode
     val museumObject: StateFlow<MuseumObject?> = objectId
         .flatMapLatest {
             val id = it ?: return@flatMapLatest flowOf(null)
-            museumRepository.getObjectById(id)
+            museumRepository.getObjectById(id,false)
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
