@@ -25,7 +25,4 @@ interface AppDependenciesEntryPoint {
     // Provided by Hilt through DatabaseModule
     fun itemLocalDataSource(): ItemLocalDataSource
     // Provided by Hilt or manually through another module
-    fun museumApi(): MuseumApi
-    // Provided by Hilt or manually through another module
-    fun museumStorage(): MuseumStorage
 }

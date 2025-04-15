@@ -23,8 +23,6 @@ class MuseumApp : Application() {
         // 🔹 Define a Koin module that "bridges" Hilt dependencies into Koin.
         // We're taking Hilt-injected instances and telling Koin to use those.
         val bridgeModule = androidSharedModule(
-            hiltEntryPoint.museumApi(),
-            hiltEntryPoint.museumStorage(),
             hiltEntryPoint.itemLocalDataSource()
         )
 

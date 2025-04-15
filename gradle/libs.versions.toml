@@ -19,7 +19,7 @@ compose-plugin = "2.1.20"
 
 # --- KMP ---
 kmpObservableViewmodel = "1.0.0-BETA-7"
-kmpNativeCoroutines = "1.0.0-ALPHA-37"
+kmpNativeCoroutines = "1.0.0-ALPHA-41"
 kotlinx-coroutines = "1.10.1"
 kotlinx-serialization = "1.7.3"
 ksp = "2.1.20-1.0.31"
