@@ -1,0 +1,30 @@
+CREATE TABLE MuseumObjectEntity (
+    objectID INTEGER NOT NULL PRIMARY KEY,
+    title TEXT,
+    artistDisplayName TEXT,
+    medium TEXT,
+    dimensions TEXT,
+    objectURL TEXT,
+    objectDate TEXT,
+    primaryImage TEXT,
+    primaryImageSmall TEXT,
+    repository TEXT,
+    department TEXT,
+    creditLine TEXT
+);
+
+-- Insert query
+insertObject:
+INSERT OR REPLACE INTO MuseumObjectEntity (
+    objectID, title, artistDisplayName, medium, dimensions, objectURL, objectDate, primaryImage, primaryImageSmall, repository, department, creditLine
+) VALUES (
+    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+);
+
+-- Select all query
+selectAll:
+SELECT * FROM MuseumObjectEntity;
+
+-- Select query to get object by ID
+getObjectById:
+SELECT * FROM MuseumObjectEntity WHERE objectID = ?;

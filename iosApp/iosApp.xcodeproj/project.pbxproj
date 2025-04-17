@@ -104,6 +104,7 @@
 			buildConfigurationList = 7555FFA5242A565B00829871 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
 				F36B1CEA2AD836FC00CB74D5 /* Compile Kotlin Framework */,
+				F24ECF2A2DAFB8870075D4FD /* Build KMP XCFramework */,
 				7555FF77242A565900829871 /* Sources */,
 				B92378962B6B1156000C7307 /* Frameworks */,
 				7555FF79242A565900829871 /* Resources */,
@@ -168,6 +169,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		F24ECF2A2DAFB8870075D4FD /* Build KMP XCFramework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build KMP XCFramework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" = \"YES\" ]; then\n  echo \"Skipping Gradle build task invocation due to IDE compatibility flag.\"\n  exit 0\nfi\n\n# Move to project root\ncd \"$SRCROOT/..\"\n\n# Build the XCFramework\n./gradlew :shared:assembleXCFramework || exit 1\n\n# Define paths\nXCFRAMEWORK_SRC=\"shared/build/XCFrameworks/release/shared.xcframework\"\nXCFRAMEWORK_DEST=\"iosApp/Frameworks/shared.xcframework\"\n\n# Create destination directory if needed\nmkdir -p \"$(dirname \"$XCFRAMEWORK_DEST\")\"\n\n# Remove any existing version\nrm -rf \"$XCFRAMEWORK_DEST\"\n\n# Copy new one in\ncp -R \"$XCFRAMEWORK_SRC\" \"$XCFRAMEWORK_DEST\"\n\necho \"✅ XCFramework copied to: $XCFRAMEWORK_DEST\"\n";
+		};
 		F36B1CEA2AD836FC00CB74D5 /* Compile Kotlin Framework */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -184,7 +203,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :shared:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :shared:assembleXCFramework\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

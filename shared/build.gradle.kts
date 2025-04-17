@@ -1,15 +1,19 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-
-    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)                         // Symbol processing after language setup
     alias(libs.plugins.kmpNativeCoroutines)
-    //alias(libs.plugins.sqldelight)
+    alias(libs.plugins.sqldelight)
 
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("org.example.apptest1.db")
+        }
+    }
 }
 
 kotlin {
@@ -33,6 +37,7 @@ kotlin {
     jvm()
 
     sourceSets {
+
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
@@ -50,6 +55,7 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.darwin)
                 implementation(libs.koin.core)
+                implementation(libs.sqldelight.driver)
             }
         }
         val iosX64Main by getting { dependsOn(iosMain) }
@@ -64,8 +70,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             api(libs.kmp.observable.viewmodel)
 
-            //implementation(libs.sqldelight.runtime)
-            //implementation(libs.sqldelight.coroutines)
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines.extensions)
         }
 
         // Required by KMM-ViewModel
