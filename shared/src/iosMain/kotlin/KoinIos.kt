@@ -1,14 +1,9 @@
-package org.example.apptest1.di
-
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
 import org.example.apptest1.db.AppDatabase
 import org.example.apptest1.dbInterface.ItemLocalDataSource
+import org.example.apptest1.di.doInitKoin
 import org.koin.dsl.module
-
-fun doInitKoin() {
-    initKoin(extraModules = listOf(iosModule))
-}
 
 val iosModule = module {
     single<SqlDriver> {
@@ -22,4 +17,10 @@ val iosModule = module {
     single {
         ItemLocalDataSource(get())
     }
+}
+
+
+// Wrapper to expose to Swift
+fun initKoinForIos() {
+    doInitKoin(iosModule)
 }

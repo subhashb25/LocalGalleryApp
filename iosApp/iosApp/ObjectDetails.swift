@@ -1,33 +1,51 @@
-//
-//  ObjectDetails.swift
-//  iosApp
-//
-//  Created by Subhash Bicholkar on 02/04/25.
-//  Copyright © 2025 orgName. All rights reserved.
-//
-
-import Foundation
 import SwiftUI
-import Shared
 import KMPNativeCoroutinesAsync
-import KMPObservableViewModelSwiftUI
+import shared
+
+class DetailViewModelWrapper: ObservableObject {
+    private let viewModel: DetailViewModel
+    @Published var museumObject: MuseumObject?
+
+    init(objectId: Int32) {
+        self.viewModel = DetailViewModel(museumRepository: KoinDependencies().museumRepository)
+        viewModel.setId(objectId: objectId)
+        observeMuseumObject()
+    }
+
+    private func observeMuseumObject() {
+        Task {
+            do {
+                // Observe the Kotlin flow and update the museumObject
+                for try await result in asyncSequence(for: viewModel.museumObject) as AsyncThrowingStream<MuseumObject, Error> {
+                    await MainActor.run {
+                        self.museumObject = result
+                    }
+                }
+            } catch {
+                print("Error observing museum object: \(error)")
+            }
+        }
+    }
+}
 
 struct DetailView: View {
-    @StateViewModel
-    var viewModel = DetailViewModel(
-        museumRepository: KoinDependencies().museumRepository
-    )
+    @StateObject private var viewModel: DetailViewModelWrapper
 
-    let objectId: Int32
+    init(objectId: Int32) {
+        _viewModel = StateObject(wrappedValue: DetailViewModelWrapper(objectId: objectId))
+    }
 
     var body: some View {
         VStack {
             if let obj = viewModel.museumObject {
                 ObjectDetails(obj: obj)
+            } else {
+                ProgressView("Loading...")
             }
         }
         .onAppear {
-            viewModel.setId(objectId: objectId)
+            // Ensure that we trigger the observation when the view appears
+            viewModel.observeMuseumObject()
         }
     }
 }
@@ -37,12 +55,13 @@ struct ObjectDetails: View {
 
     var body: some View {
         ScrollView {
-
             VStack {
+                // AsyncImage to load image from URL
                 AsyncImage(url: URL(string: obj.primaryImageSmall)) { phase in
                     switch phase {
                     case .empty:
                         ProgressView()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     case .success(let image):
                         image
                             .resizable()
@@ -52,6 +71,7 @@ struct ObjectDetails: View {
                         EmptyView()
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: 300)
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text(obj.title)
@@ -76,8 +96,11 @@ struct LabeledInfo: View {
     var data: String
 
     var body: some View {
-        Spacer()
-        Text("**\(label):** \(data)")
+        HStack {
+            Text("\(label):")
+                .fontWeight(.bold)
+            Text(data)
+        }
+        .padding(.bottom, 4)
     }
 }
-

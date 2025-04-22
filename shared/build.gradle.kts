@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinMultiplatform)
@@ -30,10 +32,17 @@ kotlin {
     }
 
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
+    iosX64()       // Simulator (Intel)
+    iosArm64()     // Device
+    iosSimulatorArm64() // Simulator (Apple Silicon)
+    // Configure the XCFramework with shared base name
+    val xcframework = XCFramework()
+    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { target ->
+        target.binaries.framework {
+            baseName = "shared"
+            xcframework.add(this)
+        }
+    }
     jvm()
 
     sourceSets {
@@ -68,6 +77,9 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.koin.core)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kmp.native.coroutines.core)
+            implementation(libs.kmp.native.coroutines.combine)
+            implementation(libs.kmp.native.coroutines.async)
             api(libs.kmp.observable.viewmodel)
 
             implementation(libs.sqldelight.runtime)
@@ -80,14 +92,6 @@ kotlin {
             languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
 
         }
-    }
-
-    tasks.register("assembleXCFramework") {
-        dependsOn(
-            "linkDebugFrameworkIosSimulatorArm64",
-            "linkDebugFrameworkIosX64",
-            "linkDebugFrameworkIosArm64"
-        )
     }
 
 }

@@ -1,22 +1,22 @@
 import SwiftUI
-import Shared
 
 struct ContentView: View {
     @State private var showContent = false
+    
     var body: some View {
         VStack {
             Button("Click me!") {
                 withAnimation {
-                    showContent = !showContent
+                    showContent.toggle()
                 }
             }
 
             if showContent {
                 VStack(spacing: 16) {
-                    Image(systemName: "swift")
+                    Image(systemName: "swift")  // Example image
                         .font(.system(size: 200))
                         .foregroundColor(.accentColor)
-                    Text("SwiftUI: \(Greeting().greet())")
+                    Text("Hello, this is a hardcoded greeting!")  // Hardcoded text
                 }
                 .transition(.move(edge: .top).combined(with: .opacity))
             }

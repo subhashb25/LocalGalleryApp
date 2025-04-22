@@ -1,21 +1,42 @@
-//
-//  ListView.swift
-//  iosApp
-//
-//  Created by Subhash Bicholkar on 02/04/25.
-//  Copyright © 2025 orgName. All rights reserved.
-//
-
 import SwiftUI
 import KMPNativeCoroutinesAsync
-import KMPObservableViewModelSwiftUI
-import Shared
+import Foundation
+import KMPNativeCoroutinesCombine
+import Combine
+import shared // Import the shared KMP module
+
+class ListViewModelWrapper: ObservableObject {
+    private let viewModel: ListViewModel
+    private var cancellables = Set<AnyCancellable>()
+
+    @Published var objects: [MuseumObject] = []
+
+    init() {
+        do {
+            self.viewModel = try KoinKt.provideListViewModel()
+            observeObjects()
+        } catch {
+            print("Failed to get ViewModel: \(error)")
+        }
+    }
+
+    private func observeObjects() {
+        createStatePublisher(for: viewModel.objects)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveValue: { [weak self] objects in
+                    self?.objects = objects
+                }
+            )
+            .store(in: &cancellables)
+    }
+
+
+}
 
 struct ListView: View {
-    @StateViewModel
-    var viewModel = ListViewModel(
-        museumRepository: KoinDependencies().museumRepository
-    )
+    
+    @StateObject private var viewModelWrapper = ListViewModelWrapper()
 
     let columns = [
         GridItem(.adaptive(minimum: 120), alignment: .top)
@@ -23,18 +44,34 @@ struct ListView: View {
 
     var body: some View {
         ZStack {
-            if !viewModel.objects.isEmpty {
-                NavigationStack {
-                    ScrollView {
-                        LazyVGrid(columns: columns, alignment: .leading, spacing: 20) {
-                            ForEach(viewModel.objects, id: \.self) { item in
-                                NavigationLink(destination: DetailView(objectId: item.objectID)) {
-                                    ObjectFrame(obj: item, onClick: {})
+            if !viewModelWrapper.objects.isEmpty {
+                if #available(iOS 16.0, *) {
+                    NavigationStack {
+                        ScrollView {
+                            LazyVGrid(columns: columns, alignment: .leading, spacing: 20) {
+                                ForEach(viewModelWrapper.objects, id: \.self) { item in
+                                    NavigationLink(destination: DetailView(objectId: item.objectID)) {
+                                        ObjectFrame(obj: item, onClick: {})
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
                                 }
-                                .buttonStyle(PlainButtonStyle())
                             }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
+                    }
+                } else {
+                    NavigationView {
+                        ScrollView {
+                            LazyVGrid(columns: columns, alignment: .leading, spacing: 20) {
+                                ForEach(viewModelWrapper.objects, id: \.self) { item in
+                                    NavigationLink(destination: DetailView(objectId: item.objectID)) {
+                                        ObjectFrame(obj: item, onClick: {})
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
                     }
                 }
             } else {
@@ -82,3 +119,4 @@ struct ObjectFrame: View {
         }
     }
 }
+

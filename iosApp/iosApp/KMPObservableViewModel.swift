@@ -2,12 +2,18 @@
 //  KMPObservableViewModel.swift
 //  iosApp
 //
-//  Created by Subhash Bicholkar on 02/04/25.
+//  Created by Subhash Bicholkar on 22/04/25.
 //  Copyright © 2025 orgName. All rights reserved.
 //
 
-import KMPObservableViewModelCore
-import Shared
+import SwiftUI
 
-extension Kmp_observableviewmodel_coreViewModel: ViewModel { }
+struct KMPObservableViewModel: View {
+    var body: some View {
+        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    }
+}
 
+#Preview {
+    KMPObservableViewModel()
+}
