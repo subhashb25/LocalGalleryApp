@@ -1,42 +1,13 @@
 import SwiftUI
 import KMPNativeCoroutinesAsync
-import Foundation
-import KMPNativeCoroutinesCombine
-import Combine
-import shared // Import the shared KMP module
-
-class ListViewModelWrapper: ObservableObject {
-    private let viewModel: ListViewModel
-    private var cancellables = Set<AnyCancellable>()
-
-    @Published var objects: [MuseumObject] = []
-
-    init() {
-        do {
-            self.viewModel = try KoinKt.provideListViewModel()
-            observeObjects()
-        } catch {
-            print("Failed to get ViewModel: \(error)")
-        }
-    }
-
-    private func observeObjects() {
-        createStatePublisher(for: viewModel.objects)
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveValue: { [weak self] objects in
-                    self?.objects = objects
-                }
-            )
-            .store(in: &cancellables)
-    }
-
-
-}
+import KMPObservableViewModelSwiftUI
+import shared
 
 struct ListView: View {
-    
-    @StateObject private var viewModelWrapper = ListViewModelWrapper()
+    @StateViewModel
+    var viewModel = ListViewModel(
+        museumRepository: KoinDependencies().museumRepository
+    )
 
     let columns = [
         GridItem(.adaptive(minimum: 120), alignment: .top)
@@ -44,18 +15,18 @@ struct ListView: View {
 
     var body: some View {
         ZStack {
-            if !viewModelWrapper.objects.isEmpty {
+            if !viewModel.objects.isEmpty {
                 if #available(iOS 16.0, *) {
                     NavigationStack {
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .leading, spacing: 20) {
-                                ForEach(viewModelWrapper.objects, id: \.self) { item in
-                                    NavigationLink(destination: DetailView(objectId: item.objectID)) {
-                                        ObjectFrame(obj: item, onClick: {})
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                }
-                            }
+                                                        ForEach(viewModel.objects, id: \.self) { item in
+                                                            NavigationLink(destination: DetailView(objectId: item.objectID)) {
+                                                                ObjectFrame(obj: item)
+                                                            }
+                                                            .buttonStyle(PlainButtonStyle())
+                                                        }
+                                                    }
                             .padding(.horizontal)
                         }
                     }
@@ -63,13 +34,13 @@ struct ListView: View {
                     NavigationView {
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .leading, spacing: 20) {
-                                ForEach(viewModelWrapper.objects, id: \.self) { item in
-                                    NavigationLink(destination: DetailView(objectId: item.objectID)) {
-                                        ObjectFrame(obj: item, onClick: {})
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                }
-                            }
+                                                        ForEach(viewModel.objects, id: \.self) { item in
+                                                            NavigationLink(destination: DetailView(objectId: item.objectID)) {
+                                                                ObjectFrame(obj: item)
+                                                            }
+                                                            .buttonStyle(PlainButtonStyle())
+                                                        }
+                                                    }
                             .padding(.horizontal)
                         }
                     }
@@ -83,7 +54,6 @@ struct ListView: View {
 
 struct ObjectFrame: View {
     let obj: MuseumObject
-    let onClick: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -119,4 +89,3 @@ struct ObjectFrame: View {
         }
     }
 }
-

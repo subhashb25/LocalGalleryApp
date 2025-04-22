@@ -6,14 +6,7 @@
 //  Copyright © 2025 orgName. All rights reserved.
 //
 
-import SwiftUI
+import KMPObservableViewModelCore
+import shared
 
-struct KMPObservableViewModel: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-#Preview {
-    KMPObservableViewModel()
-}
+extension Kmp_observableviewmodel_coreViewModel: ViewModel { }

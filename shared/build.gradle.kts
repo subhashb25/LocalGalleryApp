@@ -77,9 +77,6 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.koin.core)
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kmp.native.coroutines.core)
-            implementation(libs.kmp.native.coroutines.combine)
-            implementation(libs.kmp.native.coroutines.async)
             api(libs.kmp.observable.viewmodel)
 
             implementation(libs.sqldelight.runtime)
