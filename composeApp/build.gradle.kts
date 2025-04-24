@@ -1,53 +1,111 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+
 plugins {
-    alias(libs.plugins.androidApplication)
+    // Core plugins
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidApplication)
+
+    // Compose Multiplatform plugin
     alias(libs.plugins.compose.compiler)
+
+    // Serialization & Dependency Injection
     alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.androidHilt)
+    alias(libs.plugins.kmpNativeCoroutines)
+
+    // KSP and SQLDelight
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.sqldelight)
 }
 
-
 kotlin {
+    // Define targets
     androidTarget()
     jvmToolchain(17)
-    jvm("desktop")
+    jvm() // JVM target for desktop
+
+    // Print target names and prevent deprecated targets
+    targets.all {
+        if (name.contains("iosArm32", ignoreCase = true)) {
+            throw GradleException("iosArm32 should not be configured!")
+        }
+        println(">>> KMP Target: ${this.name}")
+    }
+
+    // Configure XCFramework for iOS targets
+    val xcframework = XCFramework()
+    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { target ->
+        target.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+            xcframework.add(this)
+        }
+    }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":shared"))
-                implementation(libs.compose.runtime)
-                implementation(libs.compose.foundation)
-                implementation(libs.compose.material3)
-                implementation(libs.compose.ui)
-                implementation(libs.compose.resources)
-                implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.kotlinx.serialization.core)
+        // Common source set
+        commonMain.dependencies {
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.resources)
 
-            }
+            implementation(libs.kotlinx.serialization.core)
+            implementation(libs.kotlinx.coroutines.core)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+
+            implementation(libs.koin.core)
+            api(libs.kmp.observable.viewmodel)
+
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines.extensions)
         }
 
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.androidx.activity.compose)
-                implementation(libs.androidx.viewmodel.compose)
-                implementation(libs.androidx.navigation.compose)
-                implementation(libs.androidx.lifecycle.viewmodel)
-                implementation(libs.androidx.lifecycle.runtime.compose)
-                implementation(libs.koin.androidx.compose)
-                implementation(libs.coil.compose)
-                implementation(libs.coil.network.ktor)
-                
-            }
+        // Android-specific dependencies
+        androidMain.dependencies {
+            implementation(libs.androidx.compose.ui.tooling.preview)
+
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.viewmodel.compose)
+            implementation(libs.androidx.navigation.compose)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
+
+            implementation(libs.koin.androidx.compose)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
+
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.koin.android)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.room.ktx)
+
+            implementation(libs.dagger.hilt)
         }
 
-        val desktopMain by getting {
-            dependencies {
-                implementation(libs.compose.desktop)
-                implementation(libs.kotlinx.coroutines.swing)
-            }
+        // iOS-specific dependencies
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+            implementation(libs.koin.core)
+            implementation(libs.sqldelight.driver)
+        }
+
+        // Desktop-specific dependencies
+        jvmMain.dependencies {
+            implementation(libs.compose.desktop)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.kotlinx.coroutines.swing)
+        }
+
+        // Enable necessary experimental APIs
+        all {
+            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
         }
     }
 }
@@ -64,11 +122,8 @@ android {
         versionName = "1.0"
     }
 
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+    // Exclude unnecessary metadata files from APK
+    packaging.resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
 
     buildTypes {
         getByName("release") {
@@ -76,22 +131,27 @@ android {
         }
     }
 
+    // Set Java compatibility
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    // Add generated sources from KSP
     sourceSets.configureEach {
         kotlin.srcDir("build/generated/ksp/${name}/kotlin")
     }
 
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    // Point to the correct AndroidManifest location
+    sourceSets["main"].manifest.srcFile("androidMain/AndroidManifest.xml")
 }
 
-// ✅ Regular debug dependency
+// App-level dependencies
 dependencies {
-    debugImplementation(libs.compose.ui)
-    implementation("com.google.guava:guava:32.1.2-jre")
+    debugImplementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
+    implementation(libs.guava)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     add("kspAndroid", libs.androidx.room.compiler)

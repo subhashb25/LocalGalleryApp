@@ -1,33 +1,16 @@
 import SwiftUI
 
-struct ContentView: View {
-    @State private var showContent = false
-    
-    var body: some View {
-        VStack {
-            Button("Click me!") {
-                withAnimation {
-                    showContent.toggle()
-                }
-            }
+struct ContentView: UIViewControllerRepresentable {
+       func makeUIViewController(context: Context) -> UIViewController {
+           MainViewControllerKt.MainViewController()
+       }
 
-            if showContent {
-                VStack(spacing: 16) {
-                    Image(systemName: "swift")  // Example image
-                        .font(.system(size: 200))
-                        .foregroundColor(.accentColor)
-                    Text("Hello, this is a hardcoded greeting!")  // Hardcoded text
-                }
-                .transition(.move(edge: .top).combined(with: .opacity))
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding()
-    }
-}
+       func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+   }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+   struct ContentView: View {
+       var body: some View {
+           ComposeView()
+                   .ignoresSafeArea()
+       }
+   }

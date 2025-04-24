@@ -3,6 +3,7 @@
 agp = "8.8.2"
 
 # --- Kotlin ---
+guava = "32.1.2-jre"
 kotlin = "2.1.20"
 
 # --- Android & Compose ---
@@ -13,6 +14,8 @@ androidx-activityCompose = "1.10.1"
 androidx-lifecycle = "2.8.4"
 androidx-navigationCompose = "2.8.9"
 androidx-viewmodelCompose = "2.8.7"
+androidx-ui-tooling = "1.7.8"
+
 coil = "3.0.0-rc02"
 compose = "1.7.0"
 compose-plugin = "2.1.20"
@@ -45,7 +48,10 @@ sqldelight = "2.0.2"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-ui-tooling" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-ui-tooling" }
 
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }

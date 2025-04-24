@@ -1,8 +1,6 @@
-package org.example.apptest1.data.local
+package org.example.apptest1.local
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import org.example.apptest1.dao.ItemDao
 import org.example.apptest1.db.ItemEntity

@@ -8,7 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.example.apptest1.dao.ItemDao
-import org.example.apptest1.data.local.AppDatabase
+import org.example.apptest1.local.AppDatabase
 import org.example.apptest1.dbInterface.ItemLocalDataSource
 import javax.inject.Singleton
 

@@ -1,5 +1,5 @@
 import SwiftUI
-import shared
+import ComposeApp
 @main
 struct iOSApp: App {
     init() {
@@ -8,7 +8,7 @@ struct iOSApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ListView()
+            ContentView()
         }
     }
 }

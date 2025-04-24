@@ -3,8 +3,6 @@ package org.example.apptest1
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.example.apptest1.data.MuseumApi
-import org.example.apptest1.data.MuseumStorage
 import org.example.apptest1.dbInterface.ItemLocalDataSource
 
 

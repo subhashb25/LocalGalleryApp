@@ -7,6 +7,6 @@
 //
 
 import KMPObservableViewModelCore
-import shared
+import ComposeApp
 
 extension Kmp_observableviewmodel_coreViewModel: ViewModel { }

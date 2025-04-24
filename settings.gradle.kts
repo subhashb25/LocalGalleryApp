@@ -38,10 +38,6 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
-
-// ✅ Required: Includes your shared Kotlin Multiplatform logic
-include(":shared")
-
 // ✅ Required: Includes the Compose Multiplatform app (Android/iOS/desktop shared UI)
 include(":composeApp")
 

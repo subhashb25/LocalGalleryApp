@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name="org.example.apptest1.MuseumApp"
+        android:name=".MuseumApp"
         android:icon="@mipmap/ic_launcher"
         android:label="MuseumApp"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
