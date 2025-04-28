@@ -4,6 +4,7 @@ plugins {
     // Core plugins
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.composeMultiplatform)
 
     // Compose Multiplatform plugin
     alias(libs.plugins.compose.compiler)
@@ -16,6 +17,14 @@ plugins {
     // KSP and SQLDelight
     alias(libs.plugins.ksp)
     alias(libs.plugins.sqldelight)
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("org.example.apptest1.db")
+        }
+    }
 }
 
 kotlin {
@@ -32,11 +41,14 @@ kotlin {
         println(">>> KMP Target: ${this.name}")
     }
 
+    iosX64()       // Simulator (Intel)
+    iosArm64()     // Device
+    iosSimulatorArm64() // Simulator (Apple Silicon)
     // Configure XCFramework for iOS targets
     val xcframework = XCFramework()
     listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { target ->
         target.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "composeApp"
             isStatic = true
             xcframework.add(this)
         }
@@ -49,7 +61,7 @@ kotlin {
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
-            implementation(libs.compose.resources)
+            implementation(compose.components.resources)
 
             implementation(libs.kotlinx.serialization.core)
             implementation(libs.kotlinx.coroutines.core)
@@ -58,11 +70,17 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
 
+
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
             implementation(libs.koin.core)
+            implementation(libs.koin.compose.viewmodel)
             api(libs.kmp.observable.viewmodel)
 
             implementation(libs.sqldelight.runtime)
             implementation(libs.sqldelight.coroutines.extensions)
+
+            implementation(libs.navigation.compose)
         }
 
         // Android-specific dependencies
@@ -71,17 +89,13 @@ kotlin {
 
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.viewmodel.compose)
-            implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-
-            implementation(libs.koin.androidx.compose)
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network.ktor)
 
             implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
 
+            implementation(libs.koin.androidx.compose)
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.room.ktx)
 
@@ -89,11 +103,17 @@ kotlin {
         }
 
         // iOS-specific dependencies
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.koin.core)
-            implementation(libs.sqldelight.driver)
+        val iosMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+                implementation(libs.koin.core)
+                implementation(libs.sqldelight.driver)
+            }
         }
+        val iosX64Main by getting { dependsOn(iosMain) }
+        val iosArm64Main by getting { dependsOn(iosMain) }
+        val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
         // Desktop-specific dependencies
         jvmMain.dependencies {
@@ -143,7 +163,7 @@ android {
     }
 
     // Point to the correct AndroidManifest location
-    sourceSets["main"].manifest.srcFile("androidMain/AndroidManifest.xml")
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
 
 // App-level dependencies
@@ -159,4 +179,15 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.androidx.hilt.composed)
     add("kspAndroid", libs.dagger.hilt.android.compiler)
+}
+
+val copyXCFrameworkToXcode by tasks.registering(Sync::class) {
+    val buildType = "Debug" // or "Debug" based on your needs
+    val frameworkDir = layout.buildDirectory.dir("XCFrameworks/$buildType/composeApp.xcframework")
+
+    from(frameworkDir)
+    into(rootProject.layout.projectDirectory.dir("iosApp/Frameworks/composeApp.xcframework")) // adjust if needed
+}
+tasks.named("assembleXCFramework") {
+    finalizedBy(copyXCFrameworkToXcode)
 }

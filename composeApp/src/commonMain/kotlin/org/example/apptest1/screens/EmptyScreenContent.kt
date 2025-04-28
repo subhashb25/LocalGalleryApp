@@ -5,8 +5,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import org.example.apptest1.R
+import localgalleryapp.composeapp.generated.resources.Res
+import localgalleryapp.composeapp.generated.resources.no_data_available
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun EmptyScreenContent(
@@ -16,6 +17,6 @@ fun EmptyScreenContent(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        Text(stringResource(R.string.no_data_available))
+        Text(stringResource(Res.string.no_data_available))
     }
 }

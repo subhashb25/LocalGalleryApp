@@ -1,8 +1,10 @@
 import SwiftUI
-import ComposeApp
+import composeApp
+
 @main
 struct iOSApp: App {
     init() {
+        print("Initializing Koin for iOS...")
         KoinIosKt.doInitKoinForIos()
     }
     

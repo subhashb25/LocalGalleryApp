@@ -1,4 +1,4 @@
-package org.example.apptest1.screens
+package org.example.apptest1.screens.list
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
@@ -12,5 +12,5 @@ class ListViewModel(museumRepository: MuseumRepository) : ViewModel() {
     @NativeCoroutinesState
     val objects: StateFlow<List<MuseumObject>> =
         museumRepository.getObjects()
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+            .stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5000), emptyList())
 }

@@ -1,4 +1,4 @@
-package org.example.apptest1.screens
+package org.example.apptest1.screens.list
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
@@ -29,7 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import org.example.apptest1.data.MuseumObject
-import org.koin.androidx.compose.koinViewModel
+import org.example.apptest1.screens.EmptyScreenContent
+import org.example.apptest1.screens.list.ListViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ListScreen(navigateToDetails: (objectId: Int) -> Unit) {

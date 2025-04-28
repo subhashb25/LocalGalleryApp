@@ -1,4 +1,4 @@
-package org.example.apptest1.screens
+package org.example.apptest1.screens.details
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
@@ -22,7 +22,7 @@ class DetailViewModel(private val museumRepository: MuseumRepository) : ViewMode
             val id = it ?: return@flatMapLatest flowOf(null)
             museumRepository.getObjectById(id,false)
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+        .stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5000), null)
 
     fun setId(objectId: Int) {
         this.objectId.value = objectId

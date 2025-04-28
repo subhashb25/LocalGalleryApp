@@ -5,8 +5,8 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.HiltAndroidApp
 import org.example.apptest1.di.androidSharedModule
 import org.example.apptest1.di.initKoin
-import org.example.apptest1.screens.DetailViewModel
-import org.example.apptest1.screens.ListViewModel
+import org.example.apptest1.screens.details.DetailViewModel
+import org.example.apptest1.screens.list.ListViewModel
 import org.koin.dsl.module
 
 @HiltAndroidApp
