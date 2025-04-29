@@ -12,8 +12,8 @@
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		F29BA1E82DB79E4900AE2A69 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F29BA1E72DB79E4900AE2A69 /* Localizable.xcstrings */; };
-		F2EDEDA02DBFAAF3002E39F9 /* composeApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2EDED9F2DBFAAF3002E39F9 /* composeApp.xcframework */; };
-		F2EDEDA12DBFAAF3002E39F9 /* composeApp.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2EDED9F2DBFAAF3002E39F9 /* composeApp.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F2B37CAF2DC09D3000144A5D /* composeApp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2B37CAD2DC09D1600144A5D /* composeApp.xcframework */; };
+		F2B37CB02DC09D3000144A5D /* composeApp.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2B37CAD2DC09D1600144A5D /* composeApp.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F2EDEDA42DBFABEA002E39F9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F2EDEDA32DBFABEA002E39F9 /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
 
@@ -24,7 +24,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F2EDEDA12DBFAAF3002E39F9 /* composeApp.xcframework in Embed Frameworks */,
+				F2B37CB02DC09D3000144A5D /* composeApp.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,8 +40,7 @@
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AB3632DC29227652001CCB65 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		F29BA1E72DB79E4900AE2A69 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		F2EDED9B2DBFA4F3002E39F9 /* composeApp.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = composeApp.xcframework; path = ../composeApp/build/XCFrameworks/debug/composeApp.xcframework; sourceTree = "<group>"; };
-		F2EDED9F2DBFAAF3002E39F9 /* composeApp.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = composeApp.xcframework; path = Frameworks/composeApp.xcframework; sourceTree = "<group>"; };
+		F2B37CAD2DC09D1600144A5D /* composeApp.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = composeApp.xcframework; path = Frameworks/composeApp.xcframework; sourceTree = "<group>"; };
 		F2EDEDA32DBFABEA002E39F9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -50,8 +49,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2B37CAF2DC09D3000144A5D /* composeApp.xcframework in Frameworks */,
 				F2EDEDA42DBFABEA002E39F9 /* libsqlite3.tbd in Frameworks */,
-				F2EDEDA02DBFAAF3002E39F9 /* composeApp.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,9 +68,8 @@
 		42799AB246E5F90AF97AA0EF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F2B37CAD2DC09D1600144A5D /* composeApp.xcframework */,
 				F2EDEDA32DBFABEA002E39F9 /* libsqlite3.tbd */,
-				F2EDED9F2DBFAAF3002E39F9 /* composeApp.xcframework */,
-				F2EDED9B2DBFA4F3002E39F9 /* composeApp.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

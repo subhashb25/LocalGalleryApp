@@ -63,14 +63,7 @@ var koinInstance: Koin? = null
 fun doInitKoin(vararg modules: Module?) {
     koinInstance = startKoin {
         modules(dataModule) // common
+        viewModelModule
         modules(*modules.filterNotNull().toTypedArray()) // Platform-specific modules (Android, iOS)
     }.koin // Store the Koin instance
-}
-
-fun provideListViewModel(): ListViewModel {
-    return getKoin().get()
-}
-
-fun provideDetailsViewModel(): DetailViewModel {
-    return getKoin().get()
 }

@@ -53,14 +53,13 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun DetailScreen(objectId: Int, navigateBack: () -> Unit) {
-    val viewModel: DetailViewModel = koinViewModel()
-    val obj by viewModel.museumObject.collectAsStateWithLifecycle()
+fun DetailScreen(
+    objectId: Int,
+    navigateBack: () -> Unit,
+) {
+    val viewModel = koinViewModel<DetailViewModel>()
 
-    LaunchedEffect(objectId) {
-        viewModel.setId(objectId)
-    }
-
+    val obj by viewModel.getObject(objectId).collectAsStateWithLifecycle(initialValue = null)
     AnimatedContent(obj != null) { objectAvailable ->
         if (objectAvailable) {
             ObjectDetails(obj!!, onBackClick = navigateBack)

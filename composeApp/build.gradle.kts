@@ -51,6 +51,7 @@ kotlin {
             baseName = "composeApp"
             isStatic = true
             xcframework.add(this)
+            binaryOptions["bundleResources"] = "true" // Important!!
         }
     }
 

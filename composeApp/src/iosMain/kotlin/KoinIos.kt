@@ -3,6 +3,7 @@ import app.cash.sqldelight.driver.native.NativeSqliteDriver
 import org.example.apptest1.db.AppDatabase
 import org.example.apptest1.dbInterface.ItemLocalDataSource
 import org.example.apptest1.di.doInitKoin
+import org.example.apptest1.di.viewModelModule
 import org.koin.dsl.module
 
 val iosModule = module {
@@ -22,5 +23,5 @@ val iosModule = module {
 
 // Wrapper to expose to Swift
 fun initKoinForIos() {
-    doInitKoin(iosModule)
+    doInitKoin(iosModule,viewModelModule)
 }

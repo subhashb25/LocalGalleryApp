@@ -34,8 +34,10 @@ import org.example.apptest1.screens.list.ListViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun ListScreen(navigateToDetails: (objectId: Int) -> Unit) {
-    val viewModel: ListViewModel = koinViewModel()
+fun ListScreen(
+    navigateToDetails: (objectId: Int) -> Unit
+) {
+    val viewModel = koinViewModel<ListViewModel>()
     val objects by viewModel.objects.collectAsStateWithLifecycle()
 
     AnimatedContent(objects.isNotEmpty()) { objectsAvailable ->
@@ -58,16 +60,8 @@ private fun ObjectGrid(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(180.dp),
-        // TODO simplify padding after https://issuetracker.google.com/issues/365052672 is fixed
-        modifier = modifier
-            .fillMaxSize()
-            .padding(
-                WindowInsets.safeDrawing
-                    .only(WindowInsetsSides.Horizontal)
-                    .asPaddingValues()
-            ),
-        contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Vertical)
-            .asPaddingValues(),
+        modifier = modifier.fillMaxSize(),
+        contentPadding = WindowInsets.safeDrawing.asPaddingValues(),
     ) {
         items(objects, key = { it.objectID }) { obj ->
             ObjectFrame(
