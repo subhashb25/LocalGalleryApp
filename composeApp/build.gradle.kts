@@ -117,10 +117,16 @@ kotlin {
         val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
         // Desktop-specific dependencies
+        val isArm64 = System.getProperty("os.arch") == "aarch64"
         jvmMain.dependencies {
-            implementation(libs.compose.desktop)
+            implementation(compose.desktop.currentOs)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.kotlinx.coroutines.swing)
+            if (isArm64) {
+                implementation(libs.skiko.awt.runtime.macos.arm64)
+            } else {
+                implementation("org.jetbrains.skiko:skiko-awt-runtime-macos-x64:0.7.73")
+            }
         }
 
         // Enable necessary experimental APIs

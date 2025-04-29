@@ -43,6 +43,7 @@ ktor = "3.0.0"
 room = "2.6.1"
 
 # --- sqldelight ---
+skikoAwtRuntimeMacosArm64 = "0.7.73"
 sqldelight = "2.0.2"
 
 # --- navigationCompose ---
@@ -94,6 +95,7 @@ androidx-hilt-composed = { module = "androidx.hilt:hilt-navigation-compose", ver
 dagger-hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 
+skiko-awt-runtime-macos-arm64 = { module = "org.jetbrains.skiko:skiko-awt-runtime-macos-arm64", version.ref = "skikoAwtRuntimeMacosArm64" }
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 sqldelight-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
