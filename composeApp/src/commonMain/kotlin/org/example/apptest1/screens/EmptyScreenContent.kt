@@ -17,6 +17,6 @@ fun EmptyScreenContent(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        Text(stringResource(Res.string.no_data_available))
+        Text("No data available")
     }
 }

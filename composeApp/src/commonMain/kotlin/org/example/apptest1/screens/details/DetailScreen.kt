@@ -82,7 +82,7 @@ private fun ObjectDetails(
                 title = {},
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(Res.string.back))
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                     }
                 }
             )
@@ -107,14 +107,14 @@ private fun ObjectDetails(
                 Column(Modifier.padding(12.dp)) {
                     Text(obj.title, style = MaterialTheme.typography.headlineMedium)
                     Spacer(Modifier.height(6.dp))
-                    LabeledInfo(stringResource(Res.string.label_title), obj.title)
-                    LabeledInfo(stringResource(Res.string.label_artist), obj.artistDisplayName)
-                    LabeledInfo(stringResource(Res.string.label_date), obj.objectDate)
-                    LabeledInfo(stringResource(Res.string.label_dimensions), obj.dimensions)
-                    LabeledInfo(stringResource(Res.string.label_medium), obj.medium)
-                    LabeledInfo(stringResource(Res.string.label_department), obj.department)
-                    LabeledInfo(stringResource(Res.string.label_repository), obj.repository)
-                    LabeledInfo(stringResource(Res.string.label_credits), obj.creditLine)
+                    LabeledInfo("Title", obj.title)
+                    LabeledInfo("Artist", obj.artistDisplayName)
+                    LabeledInfo("Date", obj.objectDate)
+                    LabeledInfo("Dimensions", obj.dimensions)
+                    LabeledInfo("Medium", obj.medium)
+                    LabeledInfo("Department", obj.department)
+                    LabeledInfo("Repository", obj.repository)
+                    LabeledInfo("Credits", obj.creditLine)
                 }
             }
         }
