@@ -18,7 +18,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
-import org.koin.mp.KoinPlatform.getKoin
 
 
 val dataModule = module {
@@ -46,6 +45,7 @@ val viewModelModule = module {
     factoryOf(::ListViewModel)
     factoryOf(::DetailViewModel)
 }
+
 
 fun initKoin(extraModules: List<Module> = emptyList()) {
     startKoin {

@@ -1,3 +1,4 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
@@ -116,17 +117,12 @@ kotlin {
         val iosArm64Main by getting { dependsOn(iosMain) }
         val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
-        // Desktop-specific dependencies
-        val isArm64 = System.getProperty("os.arch") == "aarch64"
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.client.cio)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.kotlinx.coroutines.swing)
-            if (isArm64) {
-                implementation(libs.skiko.awt.runtime.macos.arm64)
-            } else {
-                implementation("org.jetbrains.skiko:skiko-awt-runtime-macos-x64:0.7.73")
-            }
+            implementation(libs.sqldelight.desktop.driver)
         }
 
         // Enable necessary experimental APIs
@@ -197,4 +193,15 @@ val copyXCFrameworkToXcode by tasks.registering(Sync::class) {
 }
 tasks.named("assembleXCFramework") {
     finalizedBy(copyXCFrameworkToXcode)
+}
+
+compose.desktop {
+    application {
+        mainClass = "org.example.apptest1.MainKt"
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "apptest1"
+            packageVersion = "1.0.0"
+        }
+    }
 }
