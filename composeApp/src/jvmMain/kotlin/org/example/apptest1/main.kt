@@ -3,8 +3,6 @@ package org.example.apptest1
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import org.example.apptest1.di.initKoin
-import org.example.apptest1.di.viewModelModule
-import org.koin.core.context.startKoin
 
 fun main() = application {
     initKoin(listOf(jvmModule))

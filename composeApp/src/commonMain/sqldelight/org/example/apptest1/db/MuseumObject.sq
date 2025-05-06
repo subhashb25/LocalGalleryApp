@@ -1,4 +1,4 @@
-CREATE TABLE MuseumObjectEntity (
+CREATE TABLE IF NOT EXISTS MuseumObjectEntity (
     objectID INTEGER NOT NULL PRIMARY KEY,
     title TEXT,
     artistDisplayName TEXT,
